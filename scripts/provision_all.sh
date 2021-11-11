@@ -1,20 +1,15 @@
 #!/bin/bash
 clear
 
-CURRENT_DIRECTORY=$(pwd)
 THIS_SCRIPT="${0}"
-
 SCRIPTS_DIRECTORY=$(dirname "${THIS_SCRIPT}")
+CONFIG_FILE="${SCRIPTS_DIRECTORY}/../config.yaml"
 
 export PATH="${SCRIPTS_DIRECTORY}:${PATH}"
 
-UNDERCLOUD_TYPE=$(yq e .undercloud.type config.yaml)
-UNDERCLOUD_NAME=$(yq e .undercloud.name config.yaml)
+UNDERCLOUD_TYPE=$(yq e .undercloud.type "${CONFIG_FILE?}")
+UNDERCLOUD_NAME=$(yq e .undercloud.name "${CONFIG_FILE?}")
 
-echo "CURRENT_DIRECTORY.: ${CURRENT_DIRECTORY}"
-echo "THIS_SCRIPT.......: ${THIS_SCRIPT}"
-echo "SCRIPTS_DIRECTORY.: ${SCRIPTS_DIRECTORY}"
-echo "UNDERCLOUD_TYPE...: ${UNDERCLOUD_TYPE}"
-echo "UNDERCLOUD_NAME...: ${UNDERCLOUD_NAME}"
-
-"${SCRIPTS_DIRECTORY?}/${UNDERCLOUD_TYPE?}/undercloud_create.sh"
+env \
+  UNDERCLOUD_NAME="${UNDERCLOUD_NAME}" \
+  "${SCRIPTS_DIRECTORY?}/${UNDERCLOUD_TYPE?}/undercloud_create.sh"
