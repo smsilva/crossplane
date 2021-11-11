@@ -36,10 +36,10 @@ kubectl apply -f provider/config/provider-config.yaml
 kubectl get pods --namespace crossplane-system
 }
 
-if kubectl get pods --namespace crossplane-system > /dev/null; then
-  echo "Crossplane is already installed"
+if kubectl get namespace crossplane-system &> /dev/null; then
+  echo "Crossplane is already installed. I'll try to Apply the Configuration again."
   configure
-  exit 0
+  exit $?
 fi
 
 CROSSPLANE_VERSION="1.5.0"

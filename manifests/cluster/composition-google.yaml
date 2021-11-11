@@ -16,21 +16,24 @@ spec:
             autoCreateSubnetworks: false
             routingConfig:
               routingMode: REGIONAL
+
     - base:
         apiVersion: container.gcp.crossplane.io/v1beta2
         kind: Cluster
         spec:
           forProvider:
-            initialClusterVersion: "1.20"
+            initialClusterVersion: "1.20.11"
             addonsConfig:
               kubernetesDashboard:
                 disabled: true
               networkPolicyConfig:
-                disabled: false
+                disabled: true
+            autopilot:
+              enabled: false
             databaseEncryption:
               state: DECRYPTED
             defaultMaxPodsConstraint:
-              maxPodsPerNode: 120
+              maxPodsPerNode: 110
             description: Host Cluster instance of basic tier
             ipAllocationPolicy:
               createSubnetwork: true
@@ -43,8 +46,6 @@ spec:
               enabled: false
             verticalPodAutoscaling:
               enabled: true
-            masterAuth:
-              username: admin
             loggingService: logging.googleapis.com/kubernetes
             monitoringService: monitoring.googleapis.com/kubernetes
             networkSelector:
@@ -55,6 +56,7 @@ spec:
               - us-central1-f
           writeConnectionSecretToRef:
             namespace: crossplane-system
+
       patches:
         - fromFieldPath: "metadata.name"
           toFieldPath: "metadata.annotations[crossplane.io/external-name]"
@@ -62,24 +64,29 @@ spec:
             - type: string
               string:
                 fmt: "hc-%s"
+
         - fromFieldPath: "metadata.labels"
           toFieldPath: "metadata.labels"
+
         - fromFieldPath: "metadata.annotations[crossplane.io/external-name]"
           toFieldPath: "metadata.annotations[crossplane.io/external-name]"
+
         - fromFieldPath: "metadata.uid"
           toFieldPath: "spec.writeConnectionSecretToRef.name"
           transforms:
             - type: string
               string:
                 fmt: "%s-gkecluster"
+
       connectionDetails:
         - fromConnectionSecretKey: kubeconfig
+
     - base:
         apiVersion: container.gcp.crossplane.io/v1beta1
         kind: NodePool
         spec:
           forProvider:
-            version: "1.18"
+            version: "1.20.11"
             initialNodeCount: 1
             locations:
               - us-central1-a
@@ -87,7 +94,7 @@ spec:
             autoscaling:
               enabled: true
               minNodeCount: 1
-              maxNodeCount: 10
+              maxNodeCount: 5
             config:
               diskSizeGb: 100
               diskType: pd-standard
@@ -111,7 +118,7 @@ spec:
             clusterSelector:
               matchControllerRef: true
             management:
-              autoRepair: true
-              autoUpgrade: true
+              autoRepair: false
+              autoUpgrade: false
             maxPodsConstraint:
               maxPodsPerNode: 110
