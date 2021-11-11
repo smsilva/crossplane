@@ -15,3 +15,5 @@ env \
   "${SCRIPTS_DIRECTORY?}/${UNDERCLOUD_TYPE?}/undercloud_create.sh"
 
 cloud_secrets_create.sh
+
+crossplane_install.sh
