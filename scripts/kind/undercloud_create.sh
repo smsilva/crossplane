@@ -17,6 +17,7 @@ fi
 
 if kind get clusters | grep "${UNDERCLOUD_NAME?}" > /dev/null; then
   printf "Kind Cluster '%s' already exists.\n" "${UNDERCLOUD_NAME?}"
+  kubectl config use-context "kind-${UNDERCLOUD_NAME?}"
   exit 1
 else
   echo "Creating Kind Cluster [${UNDERCLOUD_NAME?}]"

@@ -1,8 +1,18 @@
+---
 apiVersion: pkg.crossplane.io/v1
 kind: Provider
 metadata:
   name: provider-kubernetes
 spec:
   package: "crossplane/provider-kubernetes:v0.1.0"
+  controllerConfigRef:
+    name: debug-config
+---
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: provider-gcp
+spec:
+  package: "crossplane/provider-gcp:v0.18.0"
   controllerConfigRef:
     name: debug-config

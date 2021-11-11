@@ -25,3 +25,5 @@ env \
   OVERCLOUD_TYPE="${OVERCLOUD_TYPE}" \
   OVERCLOUD_NAME="${OVERCLOUD_NAME}" \
   crossplane_cluster_configuration.sh
+
+kubectl apply -f  manifests/cluster/instance.yaml

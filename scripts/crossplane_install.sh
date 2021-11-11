@@ -6,6 +6,9 @@ configure() {
   kubectl apply -f provider/provider.yaml && \
   kubectl wait Provider provider-kubernetes \
     --for=condition=Healthy \
+    --timeout=120s && \
+  kubectl wait Provider provider-gcp \
+    --for=condition=Healthy \
     --timeout=120s
 
 CROSSPLANE_KUBERNETES_PROVIDER_SERVICE_ACCOUNT=$(kubectl \

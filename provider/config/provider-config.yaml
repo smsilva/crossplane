@@ -6,3 +6,16 @@ metadata:
 spec:
   credentials:
     source: InjectedIdentity
+---
+apiVersion: gcp.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: default
+spec:
+  projectID: silvios-wasp-sandbox-q4y
+  credentials:
+    source: Secret
+    secretRef:
+      namespace: default
+      name: google-credentials
+      key: GOOGLE_CREDENTIALS
