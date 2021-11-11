@@ -18,4 +18,10 @@ cloud_secrets_create.sh
 
 crossplane_install.sh
 
-crossplane_cluster_configuration.sh
+OVERCLOUD_TYPE=$(yq e .overcloud.type "${CONFIG_FILE?}")
+OVERCLOUD_NAME=$(yq e .overcloud.name "${CONFIG_FILE?}")
+
+env \
+  OVERCLOUD_TYPE="${OVERCLOUD_TYPE}" \
+  OVERCLOUD_NAME="${OVERCLOUD_NAME}" \
+  crossplane_cluster_configuration.sh
