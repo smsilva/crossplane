@@ -1,0 +1,6 @@
+#!/bin/bash
+CURRENT_DIRECTORY=$(pwd)
+THIS_SCRIPT="${0}"
+
+echo "CURRENT_DIRECTORY.: ${CURRENT_DIRECTORY}"
+echo "THIS_SCRIPT.......: ${THIS_SCRIPT}"

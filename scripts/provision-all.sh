@@ -1,0 +1,13 @@
+#!/bin/bash
+CURRENT_DIRECTORY=$(pwd)
+THIS_SCRIPT="${0}"
+
+SCRIPTS_DIRECTORY=$(dirname "${THIS_SCRIPT}")
+
+echo "CURRENT_DIRECTORY.: ${CURRENT_DIRECTORY}"
+echo "THIS_SCRIPT.......: ${THIS_SCRIPT}"
+echo "SCRIPTS_DIRECTORY.: ${SCRIPTS_DIRECTORY}"
+
+export PATH="${SCRIPTS_DIRECTORY}:${PATH}"
+
+create-undercloud.sh
