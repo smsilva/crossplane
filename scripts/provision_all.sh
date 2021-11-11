@@ -13,3 +13,5 @@ UNDERCLOUD_NAME=$(yq e .undercloud.name "${CONFIG_FILE?}")
 env \
   UNDERCLOUD_NAME="${UNDERCLOUD_NAME}" \
   "${SCRIPTS_DIRECTORY?}/${UNDERCLOUD_TYPE?}/undercloud_create.sh"
+
+cloud_secrets_create.sh
