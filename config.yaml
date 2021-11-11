@@ -1,0 +1,7 @@
+undercloud:
+  name: undercloud
+  type: kind
+
+overcloud:
+  name: overcloud
+  type: azure
