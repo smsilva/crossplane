@@ -17,3 +17,5 @@ env \
 cloud_secrets_create.sh
 
 crossplane_install.sh
+
+crossplane_cluster_configuration.sh
