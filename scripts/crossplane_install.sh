@@ -42,7 +42,7 @@ if kubectl get pods --namespace crossplane-system > /dev/null; then
   exit 0
 fi
 
-CROSSPLANE_VERSION="1.4.1"
+CROSSPLANE_VERSION="1.5.0"
 
 if ! grep --quiet crossplane-stable <<< "$(helm repo list)"; then
   echo "Adding Crosplane Stable Helm Chart"

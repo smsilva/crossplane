@@ -1,7 +1,7 @@
 apiVersion: example.crossplane.io/v1alpha1
 kind: ArgocdCluster
 metadata:
-  name: mycluster
+  name: silviosdemo1
 spec:
   repoURL: https://github.com/argoproj/argocd-example-apps.git
   path: guestbook
