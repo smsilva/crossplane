@@ -33,7 +33,17 @@ EOF
 
 kubectl apply -f provider/config/provider-config.yaml
 
-kubectl get pods --namespace crossplane-system
+kubectl \
+  --namespace crossplane-system \
+  get pod -o name | grep -oP "(provider-.*)" | xargs -n 1 -I {} kubectl \
+    --namespace crossplane-system \
+    wait pod {} \
+    --for condition=Ready \
+    --timeout=360s
+
+kubectl \
+  --namespace crossplane-system \
+  get pods
 }
 
 if kubectl get namespace crossplane-system &> /dev/null; then
