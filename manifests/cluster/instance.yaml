@@ -1,7 +1,6 @@
-apiVersion: example.crossplane.io/v1alpha1
-kind: ArgocdCluster
+apiVersion: kubernetes.silvios.me/v1alpha1
+kind: Cluster
 metadata:
-  name: silviosdemo3
+  name: undercloud
 spec:
-  repoURL: https://github.com/argoproj/argocd-example-apps.git
-  path: guestbook
+  region: centralus

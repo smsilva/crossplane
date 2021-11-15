@@ -1,34 +1,31 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: CompositeResourceDefinition
 metadata:
-  name: argocdclusters.example.crossplane.io
+  name: clusters.kubernetes.silvios.me
 spec:
   connectionSecretKeys:
     - kubeconfig
-  group: example.crossplane.io
+  group: kubernetes.silvios.me
   names:
-    kind: ArgocdCluster
-    listKind: ArgocdClusterList
-    plural: argocdclusters
-    singular: argocdcluster
+    kind: Cluster
+    listKind: ClusterList
+    plural: clusters
+    singular: cluster
+    shortNames: []
   versions:
     - name: v1alpha1
       served: true
       referenceable: true
       schema:
         openAPIV3Schema:
-          description: A ArgocdCluster is a composite resource that represents a K8S Cluster with Wordpress Installed
+          description: A Cluster is a composite resource that represents a Kubernetes Cluster
           type: object
           properties:
             spec:
               type: object
               properties:
-                repoURL:
+                region:
                   type: string
-                  description: URL to ArgoCD application repo
-                path:
-                  type: string
-                  description: path to ArgoCD application in the repo
+                  description: region in which the Kubernetes Cluster will be created
               required:
-                - repoURL
-                - path
+                - region
