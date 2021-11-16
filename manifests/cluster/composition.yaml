@@ -8,116 +8,46 @@ spec:
     kind: Cluster
   resources:
     - base:
-        apiVersion: compute.gcp.crossplane.io/v1beta1
-        kind: Network
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
         spec:
           forProvider:
-            autoCreateSubnetworks: false
-            routingConfig:
-              routingMode: REGIONAL
-
-    - base:
-        apiVersion: container.gcp.crossplane.io/v1beta2
-        kind: Cluster
-        spec:
-          forProvider:
-            initialClusterVersion: "1.20.11"
-            addonsConfig:
-              kubernetesDashboard:
-                disabled: true
-              networkPolicyConfig:
-                disabled: true
-            autopilot:
-              enabled: false
-            databaseEncryption:
-              state: DECRYPTED
-            defaultMaxPodsConstraint:
-              maxPodsPerNode: 110
-            description: Host Cluster instance of basic tier
-            ipAllocationPolicy:
-              createSubnetwork: true
-              useIpAliases: true
-            networkPolicy:
-              enabled: true
-            legacyAbac:
-              enabled: false
-            podSecurityPolicyConfig:
-              enabled: false
-            verticalPodAutoscaling:
-              enabled: true
-            loggingService: logging.googleapis.com/kubernetes
-            monitoringService: monitoring.googleapis.com/kubernetes
-            networkSelector:
-              matchControllerRef: true
-            location: us-central1
-            locations:
-              - us-central1-a
-              - us-central1-f
-          writeConnectionSecretToRef:
-            namespace: crossplane-system
-
-      patches:
-        - fromFieldPath: "metadata.name"
-          toFieldPath: "metadata.annotations[crossplane.io/external-name]"
-          transforms:
-            - type: string
-              string:
-                fmt: "hc-%s"
-
-        - fromFieldPath: "metadata.labels"
-          toFieldPath: "metadata.labels"
-
-        - fromFieldPath: "metadata.annotations[crossplane.io/external-name]"
-          toFieldPath: "metadata.annotations[crossplane.io/external-name]"
-
-        - fromFieldPath: "metadata.uid"
-          toFieldPath: "spec.writeConnectionSecretToRef.name"
-          transforms:
-            - type: string
-              string:
-                fmt: "%s-gkecluster"
-
-      connectionDetails:
-        - fromConnectionSecretKey: kubeconfig
-
-    - base:
-        apiVersion: container.gcp.crossplane.io/v1beta1
-        kind: NodePool
-        spec:
-          forProvider:
-            version: "1.20.11"
-            initialNodeCount: 3
-            locations:
-              - us-central1-a
-              - us-central1-f
-            autoscaling:
-              enabled: true
-              minNodeCount: 1
-              maxNodeCount: 5
-            config:
-              diskSizeGb: 100
-              diskType: pd-standard
-              imageType: COS
-              machineType: n1-standard-4
+            manifest:
+              apiVersion: terraform.silvios.me/v1alpha1
+              kind: StackInstance
               metadata:
-                disable-legacy-endpoints: "true"
-              oauthScopes:
-                - https://www.googleapis.com/auth/devstorage.read_only
-                - https://www.googleapis.com/auth/logging.write
-                - https://www.googleapis.com/auth/monitoring
-                - https://www.googleapis.com/auth/servicecontrol
-                - https://www.googleapis.com/auth/service.management.readonly
-                - https://www.googleapis.com/auth/trace.append
-                - https://www.googleapis.com/auth/cloud-platform
-              preemptible: false
-              serviceAccount: default
-              shieldedInstanceConfig:
-                enableIntegrityMonitoring: true
-                enableSecureBoot: true
-            clusterSelector:
-              matchControllerRef: true
-            management:
-              autoRepair: false
-              autoUpgrade: false
-            maxPodsConstraint:
-              maxPodsPerNode: 110
+                name: wasp-aks-blue
+                namespace: default
+              spec:
+                stack:
+                  provider: azurerm
+                  backend: azurerm
+                  registry: docker.io
+                  image: silviosilva/azure-kubernetes-cluster
+                  version: 2.1.2
+                vars:
+                  resource_group_name: wasp-aks-blue
+                  cluster_name: wasp-aks-blue
+                  cluster_location: centralus
+                  cluster_version: "1.21.2"
+                outputs:
+                  - aks_id
+                  - aks_kubelet_identity_client_id
+                  - kubeconfig
+
+#      patches:
+#        - type: FromCompositeFieldPath
+#          fromFieldPath: metadata.name
+#          toFieldPath: spec.forProvider.manifest.metadata.name
+#          transforms:
+#            - type: string
+#              string:
+#                fmt: "azure-bucket-%s"
+#
+#        - type: FromCompositeFieldPath
+#          fromFieldPath: metadata.name
+#          toFieldPath: spec.forProvider.manifest.spec.vars.cluster_name
+#
+#        - type: FromCompositeFieldPath
+#          fromFieldPath: spec.location
+#          toFieldPath: spec.forProvider.manifest.spec.vars.location

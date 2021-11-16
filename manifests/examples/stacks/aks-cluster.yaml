@@ -1,0 +1,21 @@
+apiVersion: terraform.silvios.me/v1alpha1
+kind: StackInstance
+metadata:
+  name: wasp-aks-blue
+  namespace: default
+spec:
+  stack:
+    provider: azurerm
+    backend: azurerm
+    registry: docker.io
+    image: silviosilva/azure-kubernetes-cluster
+    version: 2.1.2
+  vars:
+    resource_group_name: wasp-aks-blue
+    cluster_name: wasp-aks-blue
+    cluster_location: centralus
+    cluster_version: "1.21.2"
+  outputs:
+    - aks_id
+    - aks_kubelet_identity_client_id
+    - kubeconfig
