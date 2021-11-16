@@ -17,6 +17,22 @@ spec:
               apiVersion: v1
               kind: ConfigMap
               metadata:
+                name: silvios-config-map
+                namespace: default
+              data:
+                field1: value
+                field2: value2
+          providerConfigRef:
+            name: default
+    - base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        spec:
+          forProvider:
+            manifest:
+              apiVersion: v1
+              kind: ConfigMap
+              metadata:
                 name: my-config-map
                 namespace: default
           providerConfigRef:
@@ -30,11 +46,19 @@ spec:
           transforms:
             - type: string
               string:
-                fmt: "%s-kubernetes-cluster"
+                fmt: "%s-kubernetes-cluster-1"
 
         - type: FromCompositeFieldPath
           fromFieldPath: metadata.namespace
           toFieldPath: spec.writeConnectionSecretToRef.namespace
+
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.name
+          toFieldPath: spec.writeConnectionSecretToRef.name
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-kubernetes-cluster"
 
         - type: FromCompositeFieldPath
           fromFieldPath: metadata.name

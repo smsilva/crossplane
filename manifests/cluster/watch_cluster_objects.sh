@@ -9,9 +9,9 @@ show_line() {
   echo ""
 }
 
-show_line "Clusters (XRD)"                "kubectl get Cluster"
+show_line "Clusters (XRD)"                "kubectl get Cluster --show-labels"
 show_line "Cluster Events"                "kubectl describe Cluster | grep 'Events:' -A 20"
 show_line "Crossplane Kubernetes Objects" "kubectl get Objects"
-show_line "Object Events"                 "kubectl describe Objects | grep 'Events:' -A 20"
+#show_line "Object Events"                 "kubectl describe Objects | grep 'Events:' -A 20"
 show_line "Secrets"                       "kubectl get Secrets -A | grep -vE '^kube|^local|^default.*-credentials|default-token|provider-|rbac|helm|crossplane-token'"
-show_line "Configmaps"                    "kubectl get Configmaps | grep -vE '^kube'"
+show_line "Configmaps"                    "kubectl get Configmaps --show-labels | grep -vE '^kube'"
