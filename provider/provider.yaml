@@ -16,3 +16,12 @@ spec:
   package: "crossplane/provider-gcp:v0.18.0"
   controllerConfigRef:
     name: debug-config
+---
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: provider-azure
+spec:
+  package: "crossplane/provider-azure:v0.17.1"
+  controllerConfigRef:
+    name: debug-config

@@ -4,18 +4,20 @@ configure() {
   kubectl apply -f provider/controller-config-debug.yaml
 
   kubectl apply -f provider/provider.yaml && \
-  kubectl wait Provider provider-kubernetes \
-    --for=condition=Healthy \
-    --timeout=120s && \
-  kubectl wait Provider provider-gcp \
-    --for=condition=Healthy \
-    --timeout=120s
+
+  while read -r PROVIDER; do
+    kubectl wait "${PROVIDER}" \
+      --for=condition=Healthy \
+      --timeout=120s
+  done <<< "$(kubectl get Provider --output name)"
 
 CROSSPLANE_KUBERNETES_PROVIDER_SERVICE_ACCOUNT=$(kubectl \
   --namespace crossplane-system \
   get serviceaccount \
   --output name | grep provider-kubernetes | sed -e 's|serviceaccount\/||g') && \
+
 echo "${CROSSPLANE_KUBERNETES_PROVIDER_SERVICE_ACCOUNT?}" && \
+
 kubectl apply -f - <<EOF
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding

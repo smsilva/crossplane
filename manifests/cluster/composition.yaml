@@ -3,67 +3,121 @@ kind: Composition
 metadata:
   name: clusters.kubernetes.silvios.me
 spec:
-#  writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
     apiVersion: kubernetes.silvios.me/v1alpha1
     kind: Cluster
   resources:
     - base:
-        apiVersion: kubernetes.crossplane.io/v1alpha1
-        kind: Object
+        apiVersion: compute.gcp.crossplane.io/v1beta1
+        kind: Network
         spec:
           forProvider:
-            manifest:
-              apiVersion: v1
-              kind: ConfigMap
-              metadata:
-                name: silvios-config-map
-                namespace: default
-              data:
-                field1: value
-                field2: value2
-          providerConfigRef:
-            name: default
+            autoCreateSubnetworks: false
+            routingConfig:
+              routingMode: REGIONAL
+
     - base:
-        apiVersion: kubernetes.crossplane.io/v1alpha1
-        kind: Object
+        apiVersion: container.gcp.crossplane.io/v1beta2
+        kind: Cluster
         spec:
           forProvider:
-            manifest:
-              apiVersion: v1
-              kind: ConfigMap
-              metadata:
-                name: my-config-map
-                namespace: default
-          providerConfigRef:
-            name: default
+            initialClusterVersion: "1.20.11"
+            addonsConfig:
+              kubernetesDashboard:
+                disabled: true
+              networkPolicyConfig:
+                disabled: true
+            autopilot:
+              enabled: false
+            databaseEncryption:
+              state: DECRYPTED
+            defaultMaxPodsConstraint:
+              maxPodsPerNode: 110
+            description: Host Cluster instance of basic tier
+            ipAllocationPolicy:
+              createSubnetwork: true
+              useIpAliases: true
+            networkPolicy:
+              enabled: true
+            legacyAbac:
+              enabled: false
+            podSecurityPolicyConfig:
+              enabled: false
+            verticalPodAutoscaling:
+              enabled: true
+            loggingService: logging.googleapis.com/kubernetes
+            monitoringService: monitoring.googleapis.com/kubernetes
+            networkSelector:
+              matchControllerRef: true
+            location: us-central1
+            locations:
+              - us-central1-a
+              - us-central1-f
           writeConnectionSecretToRef:
             namespace: crossplane-system
+
       patches:
-        - type: FromCompositeFieldPath
-          fromFieldPath: metadata.name
-          toFieldPath: spec.forProvider.manifest.metadata.name
+        - fromFieldPath: "metadata.name"
+          toFieldPath: "metadata.annotations[crossplane.io/external-name]"
           transforms:
             - type: string
               string:
-                fmt: "%s-kubernetes-cluster-1"
+                fmt: "hc-%s"
 
-        - type: FromCompositeFieldPath
-          fromFieldPath: metadata.namespace
-          toFieldPath: spec.writeConnectionSecretToRef.namespace
+        - fromFieldPath: "metadata.labels"
+          toFieldPath: "metadata.labels"
 
-        - type: FromCompositeFieldPath
-          fromFieldPath: metadata.name
-          toFieldPath: spec.writeConnectionSecretToRef.name
+        - fromFieldPath: "metadata.annotations[crossplane.io/external-name]"
+          toFieldPath: "metadata.annotations[crossplane.io/external-name]"
+
+        - fromFieldPath: "metadata.uid"
+          toFieldPath: "spec.writeConnectionSecretToRef.name"
           transforms:
             - type: string
               string:
-                fmt: "%s-kubernetes-cluster"
+                fmt: "%s-gkecluster"
 
-        - type: FromCompositeFieldPath
-          fromFieldPath: metadata.name
-          toFieldPath: spec.writeConnectionSecretToRef.name
-          transforms:
-            - type: string
-              string:
-                fmt: "%s-kubernetes-cluster"
+      connectionDetails:
+        - fromConnectionSecretKey: kubeconfig
+
+    - base:
+        apiVersion: container.gcp.crossplane.io/v1beta1
+        kind: NodePool
+        spec:
+          forProvider:
+            version: "1.20.11"
+            initialNodeCount: 3
+            locations:
+              - us-central1-a
+              - us-central1-f
+            autoscaling:
+              enabled: true
+              minNodeCount: 1
+              maxNodeCount: 5
+            config:
+              diskSizeGb: 100
+              diskType: pd-standard
+              imageType: COS
+              machineType: n1-standard-4
+              metadata:
+                disable-legacy-endpoints: "true"
+              oauthScopes:
+                - https://www.googleapis.com/auth/devstorage.read_only
+                - https://www.googleapis.com/auth/logging.write
+                - https://www.googleapis.com/auth/monitoring
+                - https://www.googleapis.com/auth/servicecontrol
+                - https://www.googleapis.com/auth/service.management.readonly
+                - https://www.googleapis.com/auth/trace.append
+                - https://www.googleapis.com/auth/cloud-platform
+              preemptible: false
+              serviceAccount: default
+              shieldedInstanceConfig:
+                enableIntegrityMonitoring: true
+                enableSecureBoot: true
+            clusterSelector:
+              matchControllerRef: true
+            management:
+              autoRepair: false
+              autoUpgrade: false
+            maxPodsConstraint:
+              maxPodsPerNode: 110
