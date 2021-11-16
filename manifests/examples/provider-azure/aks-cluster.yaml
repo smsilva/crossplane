@@ -1,0 +1,23 @@
+---
+apiVersion: compute.azure.crossplane.io/v1alpha3
+kind: AKSCluster
+metadata:
+  name: example-akscluster
+  labels:
+    example: "true"
+spec:
+  resourceGroupNameRef:
+    name: example-rg
+  vnetSubnetIDRef:
+    name: example-sub
+  location: Central US
+  version: "1.21.2"
+  nodeCount: 1
+  nodeVMSize: Standard_B2s
+  dnsNamePrefix: crossplane-aks
+  disableRBAC: false
+  providerConfigRef:
+    name: provider-azure
+  writeConnectionSecretToRef:
+    namespace: crossplane-system
+    name: example-akscluster
