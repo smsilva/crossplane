@@ -3,7 +3,7 @@ kind: Composition
 metadata:
   name: clusters.kubernetes.silvios.me
 spec:
-  writeConnectionSecretsToNamespace: default
+#  writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
     apiVersion: kubernetes.silvios.me/v1alpha1
     kind: Cluster
@@ -15,9 +15,14 @@ spec:
           forProvider:
             manifest:
               apiVersion: v1
-              kind: Namespace
+              kind: ConfigMap
+              metadata:
+                name: my-config-map
+                namespace: default
           providerConfigRef:
             name: default
+          writeConnectionSecretToRef:
+            namespace: crossplane-system
       patches:
         - type: FromCompositeFieldPath
           fromFieldPath: metadata.name
@@ -25,4 +30,16 @@ spec:
           transforms:
             - type: string
               string:
-                fmt: "kubernetes-cluster-%s"
+                fmt: "%s-kubernetes-cluster"
+
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.namespace
+          toFieldPath: spec.writeConnectionSecretToRef.namespace
+
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.name
+          toFieldPath: spec.writeConnectionSecretToRef.name
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-kubernetes-cluster"

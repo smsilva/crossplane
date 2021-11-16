@@ -2,5 +2,6 @@ apiVersion: kubernetes.silvios.me/v1alpha1
 kind: Cluster
 metadata:
   name: undercloud
+  namespace: default
 spec:
   region: centralus
