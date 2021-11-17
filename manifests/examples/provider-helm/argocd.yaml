@@ -1,0 +1,16 @@
+apiVersion: helm.crossplane.io/v1beta1
+kind: Release
+metadata:
+  name: argocd
+spec:
+  forProvider:
+    chart:
+      name: argo-cd
+      repository: https://argoproj.github.io/argo-helm
+      version: 3.13.0
+    namespace: argocd
+    wait: true
+    values:
+      server:
+        service:
+          type: ClusterIP
