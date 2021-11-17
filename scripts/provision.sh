@@ -18,7 +18,4 @@ cloud_secrets_create.sh
 
 crossplane_install.sh
 
-env \
-  OVERCLOUD_TYPE="${OVERCLOUD_TYPE}" \
-  OVERCLOUD_NAME="${OVERCLOUD_NAME}" \
-  crossplane_cluster_configuration.sh
+argocd_install.sh
