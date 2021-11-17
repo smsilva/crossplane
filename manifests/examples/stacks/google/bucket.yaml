@@ -1,0 +1,20 @@
+apiVersion: terraform.silvios.me/v1alpha1
+kind: StackInstance
+metadata:
+  name: wasp-files-1
+  namespace: default
+spec:
+  stack:
+    provider: google
+    backend: gcs
+    registry: docker.io
+    image: silviosilva/google-bucket
+    version: edge
+  vars:
+    name: wasp-files-1
+    location: southamerica-east1
+  outputs:
+    - id
+    - self_link
+    - url
+    - project

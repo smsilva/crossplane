@@ -23,4 +23,5 @@ env \
   OVERCLOUD_NAME="${OVERCLOUD_NAME}" \
   crossplane_cluster_configuration.sh
 
-#terraform_kubernetes_controller_install.sh
+#kubectl apply -f manifests/examples/provider-helm/argocd.yaml
+kubectl apply -f manifests/examples/stacks/google/bucket.yaml
