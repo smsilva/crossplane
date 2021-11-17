@@ -1,6 +1,4 @@
 #!/bin/bash
-clear
-
 THIS_SCRIPT="${0}"
 SCRIPTS_DIRECTORY=$(dirname "${THIS_SCRIPT}")
 CONFIG_FILE="${SCRIPTS_DIRECTORY}/../config.yaml"
@@ -24,3 +22,5 @@ env \
   OVERCLOUD_TYPE="${OVERCLOUD_TYPE}" \
   OVERCLOUD_NAME="${OVERCLOUD_NAME}" \
   crossplane_cluster_configuration.sh
+
+#terraform_kubernetes_controller_install.sh
