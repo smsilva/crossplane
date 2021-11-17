@@ -9,6 +9,8 @@ export PATH="${SCRIPTS_DIRECTORY}:${PATH}"
 
 UNDERCLOUD_TYPE=$(yq e .undercloud.type "${CONFIG_FILE?}")
 UNDERCLOUD_NAME=$(yq e .undercloud.name "${CONFIG_FILE?}")
+OVERCLOUD_TYPE=$(yq e .overcloud.type "${CONFIG_FILE?}")
+OVERCLOUD_NAME=$(yq e .overcloud.name "${CONFIG_FILE?}")
 
 env \
   UNDERCLOUD_NAME="${UNDERCLOUD_NAME}" \
@@ -17,9 +19,6 @@ env \
 cloud_secrets_create.sh
 
 crossplane_install.sh
-
-OVERCLOUD_TYPE=$(yq e .overcloud.type "${CONFIG_FILE?}")
-OVERCLOUD_NAME=$(yq e .overcloud.name "${CONFIG_FILE?}")
 
 env \
   OVERCLOUD_TYPE="${OVERCLOUD_TYPE}" \
