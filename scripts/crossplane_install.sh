@@ -3,7 +3,7 @@
 configure() {
   kubectl apply -f provider/controller-config-debug.yaml
 
-  kubectl apply -f provider/provider.yaml && \
+  kubectl apply -f provider/providers.yaml && \
 
   while read -r PROVIDER; do
     kubectl wait "${PROVIDER}" \
@@ -11,27 +11,28 @@ configure() {
       --timeout=120s
   done <<< "$(kubectl get Provider --output name)"
 
-CROSSPLANE_KUBERNETES_PROVIDER_SERVICE_ACCOUNT=$(kubectl \
-  --namespace crossplane-system \
-  get serviceaccount \
-  --output name | grep provider-kubernetes | sed -e 's|serviceaccount\/||g') && \
-
-echo "${CROSSPLANE_KUBERNETES_PROVIDER_SERVICE_ACCOUNT?}" && \
+  while read -r SERVICE_ACCOUNT_NAME; do
+    echo "${SERVICE_ACCOUNT_NAME}"
 
 kubectl apply -f - <<EOF
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: provider-kubernetes-admin-binding
+  name: ${SERVICE_ACCOUNT_NAME?}-admin-binding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: cluster-admin
 subjects:
 - kind: ServiceAccount
-  name: ${CROSSPLANE_KUBERNETES_PROVIDER_SERVICE_ACCOUNT?}
+  name: ${SERVICE_ACCOUNT_NAME?}
   namespace: crossplane-system
 EOF
+
+  done <<< "$(kubectl \
+                --namespace crossplane-system \
+                get serviceaccount \
+                --output name | grep -E "provider-kubernetes|provider-helm" | sed -e 's|serviceaccount\/||g')"
 
 kubectl apply -f provider/config/provider-config.yaml
 
