@@ -35,14 +35,14 @@ spec:
                   - aks_kubelet_identity_client_id
                   - kubeconfig
 
-#      patches:
-#        - type: FromCompositeFieldPath
-#          fromFieldPath: metadata.name
-#          toFieldPath: spec.forProvider.manifest.metadata.name
-#          transforms:
-#            - type: string
-#              string:
-#                fmt: "azure-bucket-%s"
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.name
+          toFieldPath: spec.forProvider.manifest.metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: "azure-k8s-cluster-%s"
 #
 #        - type: FromCompositeFieldPath
 #          fromFieldPath: metadata.name
