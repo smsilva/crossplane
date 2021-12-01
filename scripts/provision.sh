@@ -14,6 +14,9 @@ export PATH
 UNDERCLOUD_TYPE=$(yq e .undercloud.type "${CONFIG_FILE?}")
 UNDERCLOUD_NAME=$(yq e .undercloud.name "${CONFIG_FILE?}")
 
+# Stop on any error
+set -e
+
 # Undercloud Creation: Bootstrap Crossplane Cluster
 env \
   KUBECONFIG="${KUBECONFIG}" \
@@ -33,3 +36,9 @@ crossplane_install.sh
 
 # ArgoCD Install using Crossplane Helm Provider
 argocd_install.sh
+
+# ArgoCD bootstrap Application Creation
+kubectl apply -f https://raw.githubusercontent.com/smsilva/argocd/master/applications/bootstrap.yaml
+
+# Retrieve ArgoCD Initial admin password
+argocd_retrieve_initial_admin_password.sh
