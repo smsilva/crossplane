@@ -4,4 +4,4 @@ undercloud:
 
 overcloud:
   name: overcloud
-  type: google
+  type: azure
