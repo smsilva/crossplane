@@ -1,6 +1,6 @@
 undercloud:
   name: undercloud
-  type: kind
+  type: azure
 
 overcloud:
   name: overcloud

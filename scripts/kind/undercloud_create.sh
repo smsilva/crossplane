@@ -2,11 +2,11 @@
 THIS_SCRIPT="${0}"
 THIS_SCRIPT_DIRECTORY=$(dirname "${THIS_SCRIPT}")
 
-KIND_CLUSTER_NAME="${UNDERCLOUD_NAME?}"
-KIND_CLUSTER_CONFIG_FILE="${THIS_SCRIPT_DIRECTORY}/cluster-config.yaml"
+CLUSTER_NAME="${UNDERCLOUD_NAME?}"
+CLUSTER_CONFIG_FILE="${THIS_SCRIPT_DIRECTORY}/cluster-config.yaml"
 
-if [ ! -e "${KIND_CLUSTER_CONFIG_FILE}" ]; then
-  echo "${KIND_CLUSTER_CONFIG_FILE} doesn't exists"
+if [ ! -e "${CLUSTER_CONFIG_FILE}" ]; then
+  echo "${CLUSTER_CONFIG_FILE} doesn't exists"
   exit 1
 fi
 
@@ -23,8 +23,8 @@ else
   echo "Creating Kind Cluster [${UNDERCLOUD_NAME?}]"
 
   kind create cluster \
-    --config "${KIND_CLUSTER_CONFIG_FILE?}" \
-    --name "${KIND_CLUSTER_NAME?}"
+    --config "${CLUSTER_CONFIG_FILE?}" \
+    --name "${CLUSTER_NAME?}"
 
   for NODE in $(kubectl get nodes --output name); do
     kubectl wait "${NODE}" \
