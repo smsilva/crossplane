@@ -25,5 +25,3 @@ echo ""
 echo "     https://localhost:8080"
 echo ""
 )
-
-kubectl apply -f https://raw.githubusercontent.com/smsilva/argocd/tdc/applications/bootstrap.yaml
