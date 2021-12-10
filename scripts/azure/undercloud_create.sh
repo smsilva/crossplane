@@ -1,5 +1,5 @@
 #!/bin/bash
-STACK_IMAGE="silviosilva/azure-kubernetes-cluster:0.1.0"
+STACK_IMAGE="silviosilva/azure-undercloud:latest"
 
 stackrun ${STACK_IMAGE} apply -auto-approve
 
