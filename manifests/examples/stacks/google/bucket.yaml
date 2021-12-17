@@ -1,7 +1,6 @@
 apiVersion: terraform.silvios.me/v1alpha1
 kind: StackInstance
 metadata:
-  name: wasp-files-2
   namespace: default
 spec:
   stack:
@@ -11,8 +10,8 @@ spec:
     image: silviosilva/google-bucket
     version: edge
   vars:
-    name: wasp-files-2
-    location: southamerica-east1
+    name: wasp-files-1
+    location: southamerica-west1
   outputs:
     - id
     - self_link

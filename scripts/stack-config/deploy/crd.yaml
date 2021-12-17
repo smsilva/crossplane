@@ -1,0 +1,26 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: stackconfigs.terraform.silvios.me
+spec:
+  group: terraform.silvios.me
+  names:
+    kind: StackConfig
+    listKind: StackConfigList
+    plural: stackconfigs
+    shortNames: []
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                region:
+                  type: string
+              required:
+                - region

@@ -1,0 +1,8 @@
+---
+apiVersion: terraform.silvios.me/v1alpha1
+kind: StackConfig
+metadata:
+  name: wasp-config-1
+  namespace: default
+spec:
+  region: region-2
