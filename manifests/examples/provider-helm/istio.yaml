@@ -1,0 +1,28 @@
+---
+apiVersion: helm.crossplane.io/v1beta1
+kind: Release
+metadata:
+  name: istio-base
+spec:
+  forProvider:
+    chart:
+      name: base
+      repository: https://istio-release.storage.googleapis.com/charts
+      version: 1.12.1
+    namespace: istio-system
+    wait: true
+    skipCreateNamespace: false
+---
+apiVersion: helm.crossplane.io/v1beta1
+kind: Release
+metadata:
+  name: istiod
+spec:
+  forProvider:
+    chart:
+      name: istiod
+      repository: https://istio-release.storage.googleapis.com/charts
+      version: 1.12.1
+    namespace: istio-system
+    wait: true
+    skipCreateNamespace: false
