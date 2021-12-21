@@ -26,6 +26,8 @@ kubectl \
   --for condition=Available \
   --timeout=360s
 
+echo ""
+
 if ! which kubectl-crossplane &> /dev/null; then
   curl -sL https://raw.githubusercontent.com/crossplane/crossplane/master/install.sh | sh
 fi
@@ -33,12 +35,13 @@ fi
 kubectl apply -f install/service-accounts.yaml
 kubectl apply -f install/cluster-role-binding-admin.yaml
 kubectl apply -f install/controller-config.yaml
-kubectl apply -f install/providers.yaml && sleep 5
+kubectl apply -f install/providers.yaml && sleep 15
 kubectl apply -f install/provider-config.yaml
 
+echo ""
 kubectl \
   --namespace crossplane-system \
-  get pod -o name | xargs -n 1 -I {} kubectl \
+  get pod -o jsonpath="{range .items[*]}{.metadata.name}{'\n'}{end}" | xargs -n 1 -I {} kubectl \
     --namespace crossplane-system \
     wait pod {} \
     --for condition=Ready \
