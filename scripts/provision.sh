@@ -4,7 +4,7 @@ SCRIPTS_DIRECTORY=$(dirname "${THIS_SCRIPT}")
 PATH="${SCRIPTS_DIRECTORY}:${PATH}"
 
 CONFIG_FILE="${SCRIPTS_DIRECTORY}/../config.yaml"
-KUBECONFIG="${HOME}/.kube/undercloud"
+KUBECONFIG="${HOME}/.kube/config"
 
 # Export
 export KUBECONFIG

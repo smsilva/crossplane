@@ -1,0 +1,22 @@
+---
+apiVersion: pkg.crossplane.io/v1alpha1
+kind: ControllerConfig
+metadata:
+  name: helm-cc
+  labels:
+    app: crossplane-provider-helm
+spec:
+  serviceAccountName: provider-helm-sa
+  args:
+    - --debug
+---
+apiVersion: pkg.crossplane.io/v1alpha1
+kind: ControllerConfig
+metadata:
+  name: kubernetes-cc
+  labels:
+    app: crossplane-provider-kubernetes
+spec:
+  serviceAccountName: provider-kubernetes-sa
+  args:
+    - --debug
