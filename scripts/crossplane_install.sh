@@ -1,36 +1,27 @@
 #!/bin/bash
-
-if kubectl get namespace crossplane-system &> /dev/null; then
-  echo "Crossplane is already installed. I'll try to Apply the Configuration again."
-fi
-
 CROSSPLANE_VERSION="1.5.1"
 
-if ! grep --quiet crossplane-stable <<< "$(helm repo list)"; then
-  echo "Adding Crosplane Stable Helm Chart"
-  helm repo add crossplane-stable https://charts.crossplane.io/stable
-  helm repo update
-else
-  helm repo list | grep -E "NAME|crossplane-stable"
-fi
+helm repo add \
+  --force-update crossplane-stable https://charts.crossplane.io/stable
+
+echo ""
+
+helm repo update
+
+echo ""
+
+helm search repo crossplane-stable
+
+echo ""
 
 helm install crossplane \
   --create-namespace \
   --namespace crossplane-system \
   --version "${CROSSPLANE_VERSION?}" \
-  crossplane-stable/crossplane && \
-kubectl \
-  wait deployment \
-  --namespace crossplane-system \
-  --selector release=crossplane \
-  --for condition=Available \
-  --timeout=360s
+  --wait \
+  crossplane-stable/crossplane
 
 echo ""
-
-if ! which kubectl-crossplane &> /dev/null; then
-  curl -sL https://raw.githubusercontent.com/crossplane/crossplane/master/install.sh | sh
-fi
 
 kubectl apply -f install/service-accounts.yaml
 kubectl apply -f install/cluster-role-binding-admin.yaml
@@ -39,6 +30,7 @@ kubectl apply -f install/providers.yaml && sleep 15
 kubectl apply -f install/provider-config.yaml
 
 echo ""
+
 kubectl \
   --namespace crossplane-system \
   get pod -o jsonpath="{range .items[*]}{.metadata.name}{'\n'}{end}" | xargs -n 1 -I {} kubectl \
@@ -48,10 +40,13 @@ kubectl \
     --timeout=360s
 
 kubectl get namespaces
+
 echo ""
 
 kubectl --namespace crossplane-system get pods
+
 echo ""
 
-kubectl api-resources | grep crossplane
+kubectl api-resources | grep -E "NAME|crossplane"
+
 echo ""
