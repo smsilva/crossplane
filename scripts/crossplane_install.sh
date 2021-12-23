@@ -38,15 +38,3 @@ kubectl \
     wait pod {} \
     --for condition=Ready \
     --timeout=360s
-
-kubectl get namespaces
-
-echo ""
-
-kubectl --namespace crossplane-system get pods
-
-echo ""
-
-kubectl api-resources | grep -E "NAME|crossplane"
-
-echo ""
