@@ -28,8 +28,6 @@ cloud_secrets_create.sh
 
 # Crossplane Installation
 # - providers:
-#   - azure
-#   - google
 #   - helm
 #   - kubernetes
 crossplane_install.sh
