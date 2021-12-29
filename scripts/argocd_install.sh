@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "Installing Helm Release using Crossplane Helm Provider"
 
-kubectl apply -f manifests/examples/provider-helm/argocd.yaml
+kubectl apply -f install/helm-release-argocd.yaml
 
 kubectl wait Release argocd \
   --for condition=Ready \
