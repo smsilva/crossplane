@@ -35,8 +35,14 @@ crossplane_install.sh
 # ArgoCD Install using Crossplane Helm Provider
 argocd_install.sh
 
+# ArgoCD Create SSH Secret
+argocd_create_ssh_auth_secret.sh
+
+# ARgoCD Update Config Maps
+kubectl apply -f manifests/argocd-ssh-auth/argocd_config_maps.yaml
+
 # ArgoCD bootstrap Application Creation
-kubectl apply -f https://raw.githubusercontent.com/smsilva/argocd/wasp/applications/undercloud.yaml
+#kubectl apply -f https://raw.githubusercontent.com/smsilva/argocd/wasp/applications/undercloud.yaml
 
 # Retrieve ArgoCD Initial admin password
 argocd_retrieve_initial_admin_password.sh
