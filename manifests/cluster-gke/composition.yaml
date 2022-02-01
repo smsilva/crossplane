@@ -54,7 +54,7 @@ spec:
               - us-central1-a
               - us-central1-f
           writeConnectionSecretToRef:
-            namespace: crossplane-system
+            namespace: crossplane
 
       patches:
         - fromFieldPath: "metadata.name"

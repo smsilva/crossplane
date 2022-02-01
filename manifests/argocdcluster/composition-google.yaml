@@ -3,7 +3,7 @@ kind: Composition
 metadata:
   name: argocdclusters.example.crossplane.io
 spec:
-  writeConnectionSecretsToNamespace: crossplane-system
+  writeConnectionSecretsToNamespace: crossplane
   compositeTypeRef:
     apiVersion: example.crossplane.io/v1alpha1
     kind: ArgocdCluster
@@ -55,7 +55,7 @@ spec:
               - us-central1-a
               - us-central1-f
           writeConnectionSecretToRef:
-            namespace: crossplane-system
+            namespace: crossplane
 
       patches:
         - fromFieldPath: "metadata.name"

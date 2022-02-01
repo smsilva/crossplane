@@ -6,7 +6,7 @@ helm repo update
 
 helm install crossplane \
   --create-namespace \
-  --namespace crossplane-system \
+  --namespace crossplane \
   --wait \
   crossplane-stable/crossplane
 
@@ -17,9 +17,9 @@ kubectl apply -f install/providers.yaml && sleep 15
 kubectl apply -f install/provider-config.yaml
 
 kubectl \
-  --namespace crossplane-system \
+  --namespace crossplane \
   get pod -o jsonpath="{range .items[*]}{.metadata.name}{'\n'}{end}" | xargs -n 1 -I {} kubectl \
-    --namespace crossplane-system \
+    --namespace crossplane \
     wait pod {} \
     --for condition=Ready \
     --timeout=360s

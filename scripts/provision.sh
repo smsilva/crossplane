@@ -41,8 +41,14 @@ argocd_create_ssh_auth_secret.sh
 # ARgoCD Update Config Maps
 kubectl apply -f manifests/argocd-ssh-auth/argocd_config_maps.yaml
 
-# ArgoCD bootstrap Application Creation
-#kubectl apply -f https://raw.githubusercontent.com/smsilva/argocd/wasp/applications/undercloud.yaml
-
 # Retrieve ArgoCD Initial admin password
 argocd_retrieve_initial_admin_password.sh
+
+# ArgoCD bootstrap Application Creation
+kubectl apply -f https://raw.githubusercontent.com/smsilva/argocd/wasp/applications/undercloud.yaml
+
+echo ""
+echo "  4. The bootstrap ArgoCD Application was created using:"
+echo ""
+echo "    kubectl apply -f https://raw.githubusercontent.com/smsilva/argocd/wasp/applications/undercloud.yaml"
+echo ""

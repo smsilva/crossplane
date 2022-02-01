@@ -9,8 +9,8 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: provider-helm-sa
-    namespace: crossplane-system
+    namespace: crossplane
 
   - kind: ServiceAccount
     name: provider-kubernetes-sa
-    namespace: crossplane-system
+    namespace: crossplane
